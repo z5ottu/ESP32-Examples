@@ -84,7 +84,7 @@ static esp_err_t event_handler(void* ctx, system_event_t* event) {
     case SYSTEM_EVENT_AP_STA_GOT_IP6:
       ESP_LOGI(TAG,"Got IP6=%01x:%01x:%01x:%01x",
         event->event_info.got_ip6.ip6_info.ip.addr[0],event->event_info.got_ip6.ip6_info.ip.addr[1],
-        event->event_info.got_ip6.ip6_info.ip.addr[2],event->event_info.got_ip6.ip6_info.ip.addr[3])
+        event->event_info.got_ip6.ip6_info.ip.addr[2],event->event_info.got_ip6.ip6_info.ip.addr[3]);
       break;
     default:
       ESP_LOGI(TAG,"Unregistered event=%i",event->event_id);
@@ -221,7 +221,7 @@ static void http_serve(struct netconn *conn) {
   const static char* TAG = "http_server";
   const static char HTML_HEADER[] = "HTTP/1.1 200 OK\nContent-type: text/html\n\n";
   const static char ERROR_HEADER[] = "HTTP/1.1 404 Not Found\nContent-type: text/html\n\n";
-  const static char JS_HEADER[] = "HTTP/1.1 200 OK\nContent-type: text/javascript\n\n";
+  //const static char JS_HEADER[] = "HTTP/1.1 200 OK\nContent-type: text/javascript\n\n";
   const static char CSS_HEADER[] = "HTTP/1.1 200 OK\nContent-type: text/css\n\n";
   //const static char PNG_HEADER[] = "HTTP/1.1 200 OK\nContent-type: image/png\n\n";
   const static char ICO_HEADER[] = "HTTP/1.1 200 OK\nContent-type: image/x-icon\n\n";
@@ -238,9 +238,9 @@ static void http_serve(struct netconn *conn) {
   const uint32_t root_html_len = root_html_end - root_html_start;
 
   // test.js
-  extern const uint8_t test_js_start[] asm("_binary_test_js_start");
-  extern const uint8_t test_js_end[] asm("_binary_test_js_end");
-  const uint32_t test_js_len = test_js_end - test_js_start;
+//  extern const uint8_t test_js_start[] asm("_binary_test_js_start");
+//  extern const uint8_t test_js_end[] asm("_binary_test_js_end");
+//  const uint32_t test_js_len = test_js_end - test_js_start;
 
   // test.css
   extern const uint8_t test_css_start[] asm("_binary_test_css_start");
@@ -281,15 +281,6 @@ static void http_serve(struct netconn *conn) {
            && strstr(buf,"Upgrade: websocket")) {
         ESP_LOGI(TAG,"Requesting websocket on /");
         ws_server_add_client(conn,buf,buflen,"/",websocket_callback);
-        netbuf_delete(inbuf);
-      }
-
-      else if(strstr(buf,"GET /test.js ")) {
-        ESP_LOGI(TAG,"Sending /test.js");
-        netconn_write(conn, JS_HEADER, sizeof(JS_HEADER)-1,NETCONN_NOCOPY);
-        netconn_write(conn, test_js_start, test_js_len,NETCONN_NOCOPY);
-        netconn_close(conn);
-        netconn_delete(conn);
         netbuf_delete(inbuf);
       }
 

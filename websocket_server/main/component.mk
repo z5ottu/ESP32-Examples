@@ -1,1 +1,1 @@
-COMPONENT_PRIV_INCLUDEDIRS := server
+COMPONENT_EMBED_TXTFILES := server/root.html server/error.html server/test.css server/favicon.ico

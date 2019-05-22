@@ -10,13 +10,13 @@ config LED_PIN
 
 config AP_SSID
   string "Access Point SSID"
-  default "ESP32 Test"
+  default "z5ottu1"
   help
     Name of access point that the ESP32 creates.
 
 config AP_PSSWD
   string "Access Point Password"
-  default "hello world"
+  default "helloz5ottu"
   help
     Password of access point that the ESP32 creates.
 
